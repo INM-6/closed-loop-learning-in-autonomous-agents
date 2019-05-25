@@ -1,0 +1,28 @@
+{
+    "All":
+    {
+        "seed": 12,
+        "write_report": false,
+        "report_file": "./report_demo.json",
+        "overwrite_files": false
+    },
+    "Env":
+    {
+        "env": "MountainCar-v0",
+        "initial_reward": -1.0,
+        "final_reward": -0.4,
+        "render": true,
+        "monitor": false,
+        "monitor_dir": "./mountain-car-paper-demo/",
+        "monitor_args":
+        {
+            "write_upon_reset": true,
+            "video_callable": false
+        }
+    },
+    "EnvRunner":
+    {
+        "update_interval": 0.02,
+        "inter_trial_duration": 0.4
+    }
+}

@@ -1,0 +1,92 @@
+{
+    "all":
+    {
+        "label_prefix": "new-paper-demo-"
+    },
+
+    "kernel_params":
+    {
+        "dt": 1.0,
+        "delay": 1.0,
+        "sigma": 0.0,
+        "neuron_model": "thresholdlin_rate_ipn",
+        "seed": 9
+    },
+
+    "input_params":
+    {
+        "tau": 1.0,
+        "g": 1.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "theta": -0.5
+    },
+
+    "critic_params":
+    {
+        "tau": 0.1,
+        "mean": -1.0,
+        "std": 0.0,
+        "theta": -1.0,
+        "trace_delay_steps": 1
+    },
+
+    "reward_params":
+    {
+        "tau": 1.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "theta": -0.0999
+    },
+
+    "actor_params":
+    {
+        "g": 1.0,
+        "tau": 0.1,
+        "mean": 0.0,
+        "std": 0.05,
+        "trace_delay_steps": 1
+    },
+
+    "reward_input_params":
+    {
+        "weight": 0.1
+    },
+
+    "input_critic_params":
+    {
+        "A": 0.1250,
+        "weight_decay_constant": 0.0,
+        "Wmax": 1.0,
+        "Wmin": -1.0,
+        "post_threshold": -1.0,
+        "trace_delay_steps": 1,
+        "model": "hebbian_rate_connection"
+    },
+
+    "critic_reward_params":
+    {
+        "weight_scaling": 1.0,
+        "tau_r": 20000.0,
+        "delay": 1.0
+    },
+
+    "input_actor_params":
+    {
+        "weight": 0.3,
+        "A": 0.250,
+        "weight_decay_constant": 0.0,
+        "Wmax": 1.0,
+        "Wmin": 0.05,
+        "post_threshold": 0.1,
+        "trace_delay_steps": 1,
+        "model": "hebbian_rate_connection"
+    },
+
+    "actor_wta_params":
+    {
+        "exc": 1.2,
+        "inh": -0.55,
+        "sigma": 0.1
+    }
+}
