@@ -1,0 +1,46 @@
+{
+    "All":
+    {
+        "seed": 12343,
+        "time_stamp_tolerance": 0.02,
+        "write_report": true,
+        "report_file": "./report.json",
+        "prefix": "fl"
+    },
+    "Env":
+    {
+        "initial_reward": 0.0,
+        "final_reward_null": -0.1,
+        "min_reward": -1.0,
+        "max_reward": 1.0,
+        "inter_trial_observation": 9999,
+        "render": true,
+        "monitor": true,
+        "monitor_dir": "./frozen-lake-experiment/",
+        "env": "FrozenLake-v0",
+        "monitor_args":
+        {
+            "write_upon_reset": true
+        }
+    },
+    "EnvRunner":
+    {
+        "update_interval": 0.1,
+        "inter_trial_duration": 0.1
+    },
+    "CommandReceiver":
+    {
+        "socket": 5555,
+        "time_stamp_tolerance": 0.01
+    },
+    "ObservationSender":
+    {
+        "socket": 5556,
+        "update_interval": 0.02
+    },
+    "RewardSender":
+    {
+        "socket": 5557,
+        "update_interval": 0.02
+    }
+}

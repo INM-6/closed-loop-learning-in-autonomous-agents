@@ -1,0 +1,94 @@
+{
+    "all":
+    {
+        "label_prefix": ""
+    },
+
+    "kernel_params":
+    {
+        "dt": 1.0,
+        "delay": 1.0,
+        "sigma": 0.0,
+        "seed": 1234,
+        "neuron_model": "thresholdlin_rate_ipn"
+    },
+
+    "input_params":
+    {
+        "tau": 5.0,
+        "g": 1.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "theta": -0.5
+    },
+
+    "critic_params":
+    {
+        "tau": 0.1,
+        "mean": -1.0,
+        "std": 0.0,
+        "theta": -1.0,
+	"trace_delay_steps": 20
+    },
+
+    "reward_params":
+    {
+        "tau": 1.0,
+        "mean": 0.0,
+        "std": 0.0,
+        "theta": 0.0001
+    },
+
+    "actor_params":
+    {
+        "g": 1.0,
+        "tau": 0.1,
+        "mean": 0.0,
+        "std": 0.20,
+	    "trace_delay_steps": 20
+
+    },
+
+    "reward_input_params":
+    {
+        "weight": 0.1
+    },
+
+    "input_critic_params":
+    {
+	"model": "hebbian_rate_connection",
+	"weight": 0.0,
+        "A": 0.01,
+        "weight_decay_constant": 0.0,
+        "Wmax": 1.0,
+        "Wmin": -1.0,
+        "post_threshold": -1.0,
+	"trace_delay_steps": 20
+    },
+
+    "critic_reward_params":
+    {
+        "weight_scaling": 1.0,
+        "tau_r": 20000.0,
+        "delay": 1.0
+    },
+
+    "input_actor_params":
+    {
+	"model": "hebbian_rate_connection",
+        "weight": 0.9,
+        "A": 0.2,
+        "weight_decay_constant": 0.0,
+        "Wmax": 1.0,
+        "Wmin": 0.1,
+        "post_threshold": 0.5,
+	"trace_delay_steps": 20
+    },
+
+    "actor_wta_params":
+    {
+        "exc": 1.2,
+        "inh": -0.55,
+        "sigma": 0.1
+    }
+}

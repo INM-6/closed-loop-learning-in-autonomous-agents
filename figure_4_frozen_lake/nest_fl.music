@@ -1,0 +1,51 @@
+stoptime=1000.
+rtf=2.0
+[reward]
+  binary=zmq_cont_adapter
+  args=
+  np=1
+  music_timestep=0.001
+  message_type=GymObservation
+  zmq_topic=
+  zmq_addr=tcp://localhost:5557
+[sensor]
+  binary=zmq_cont_adapter
+  args=
+  np=1
+  music_timestep=0.001
+  message_type=GymObservation
+  zmq_topic=
+  zmq_addr=tcp://localhost:5556
+  verbose=true
+[discretize]
+  binary=discretize_adapter
+  args=
+  np=1
+  music_timestep=0.001
+  grid_positions_filename=grid_pos.json
+  verbose=true
+[nest]
+  binary=../actor_critic_network/network.py
+  args=-t 1000. -n 16 -m 4 -p network_params.json
+  np=1
+[argmax]
+  binary=argmax_adapter
+  args=
+  np=1
+  verbose=true
+  music_timestep=0.001
+[command]
+  binary=cont_zmq_adapter
+  args=
+  np=1
+  music_timestep=0.001
+  message_type=GymCommand
+  min=0
+  max=3
+  zmq_topic=
+  zmq_addr=tcp://*:5555
+sensor.out->discretize.in[1]
+discretize.out->nest.in[16]
+reward.out->nest.reward_in[1]
+nest.out->argmax.in[4]
+argmax.out->command.in[1]
