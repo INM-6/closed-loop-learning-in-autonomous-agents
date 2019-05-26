@@ -1,5 +1,5 @@
 stoptime=400.
-rtf=0.01
+rtf=1.0
 [reward]
   binary=zmq_cont_adapter
   args=
@@ -30,6 +30,7 @@ rtf=0.01
   binary=argmax_adapter
   args=
   np=1
+  verbose=true
   music_timestep=0.001
 [command]
   binary=cont_zmq_adapter

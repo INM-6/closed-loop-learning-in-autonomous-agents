@@ -62,7 +62,7 @@ np.random.seed(123)
 
 nest.ResetKernel()
 nest.set_verbosity('M_FATAL')
-nest.SetKernelStatus({'resolution': params['kernel_params']['dt'], 'print_time': False,
+nest.SetKernelStatus({'resolution': params['kernel_params']['dt'], 'print_time': True,
                       'use_wfr': False, 'overwrite_files': True, 'grng_seed': params['kernel_params']['seed'],
                       'rng_seeds': [params['kernel_params']['seed'] + 1]})
 
