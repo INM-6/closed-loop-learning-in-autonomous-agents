@@ -1,10 +1,10 @@
 stoptime=400.
 rtf=1.0
+music_timestep=0.001
 [reward]
   binary=zmq_cont_adapter
   args=
   np=1
-  music_timestep=0.001
   message_type=GymObservation
   zmq_topic=
   zmq_addr=tcp://localhost:5557
@@ -12,7 +12,6 @@ rtf=1.0
   binary=zmq_cont_adapter
   args=
   np=1
-  music_timestep=0.001
   message_type=GymObservation
   zmq_topic=
   zmq_addr=tcp://localhost:5556
@@ -20,7 +19,6 @@ rtf=1.0
   binary=discretize_adapter
   args=
   np=1
-  music_timestep=0.001
   grid_positions_filename=grid_pos.json
 [nest]
   binary=../actor_critic_network/network.py
@@ -30,14 +28,12 @@ rtf=1.0
   binary=argmax_adapter
   args=
   np=1
-  music_timestep=0.001
 [command]
   binary=cont_zmq_adapter
   args=
   np=1
   min=0
   max=2
-  music_timestep=0.01
   message_type=GymCommand
   zmq_topic=
   zmq_addr=tcp://*:5555
