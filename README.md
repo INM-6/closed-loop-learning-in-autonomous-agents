@@ -23,7 +23,7 @@ $ cd figure_3_mountain_car
 $ gymz-controller gym MountainCar-v0.json&
 $ mpirun -np 6 music nest_mc.music
 ```
-You might need to pass the `--oversubscribe` to mpirun, depending on your MPI library version.
+You might need to pass the option `--oversubscribe` to mpirun, depending on your MPI library version.
 
 ## Reproducing Fig 4, "Frozen Lake"
 ...
