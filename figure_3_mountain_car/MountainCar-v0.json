@@ -3,7 +3,7 @@
     {
         "seed": 12,
         "write_report": true,
-        "report_file": "./report_demo.json",
+        "report_file": "report_demo.json",
         "overwrite_files": true,
         "prefix": "mc"
     },
@@ -14,7 +14,7 @@
         "final_reward": -0.4,
         "render": true,
         "monitor": true,
-        "monitor_dir": "./mountain-car-paper-demo-3/",
+        "monitor_dir": "mountain-car-paper-demo-3",
         "monitor_args":
         {
             "write_upon_reset": true,

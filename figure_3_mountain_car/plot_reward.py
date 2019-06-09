@@ -13,7 +13,7 @@ import plot_config
 params = {
     'report_files': 'mc/mountain-car-paper-demo-3/openaigym.episode_batch.0.*.stats.json',
     'env_image': 'mountain_car.png',
-    'episodes': 4,
+    'episodes': 15,
     'xlim': [0, 15],
     'ylim': [-6500, 100],
     'xlabel': 'Episode',
@@ -29,7 +29,7 @@ def parse_reward_file(fn):
     with open(fn, 'r') as f:
         report = json.load(f)
 
-    assert(len(report['episode_rewards']) >= params['episodes'])
+    assert len(report['episode_rewards']) >= params['episodes'], 'too few episodes recorded'
     return report['episode_rewards']
 
 
@@ -47,7 +47,7 @@ def load_rewards(report_files):
 def plot_reward(params):
     fig = plt.figure(figsize=plot_config.double_figure_size)
 
-    ax_rew = fig.add_axes([0.23, 0.2, 0.74, 0.77])
+    ax_rew = fig.add_axes([0.23, 0.22, 0.74, 0.77])
     ax_rew.set_xlabel(params['xlabel'], fontsize=plot_config.fontsize_regular)
     ax_rew.set_ylabel(params['ylabel'], fontsize=plot_config.fontsize_regular)
     ax_rew.set_xlim(params['xlim'])
