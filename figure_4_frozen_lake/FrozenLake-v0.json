@@ -18,6 +18,7 @@
         "monitor": true,
         "monitor_dir": "./frozen-lake-experiment/",
         "env": "FrozenLake-v0",
+        "env_params": {"kwargs": {"is_slippery": false}},
         "monitor_args":
         {
             "write_upon_reset": true
