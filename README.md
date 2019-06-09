@@ -20,15 +20,15 @@ Make sure to set your `PATH`, `PYTHONPATH` and `LD_LIBRARY_PATH` variables corre
 ## Reproducing Fig 3, "Mountain Car"
 ```bash
 $ cd figure_3_mountain_car
-$ gymz-controller gym MountainCar-v0.json&
+$ gymz-controller gym MountainCar-v0.json &
 $ mpirun -np 6 music nest_mc.music
 ```
 You might need to pass the option `--oversubscribe` to mpirun, depending on your MPI library version.
 
 ## Reproducing Fig 4, "Frozen Lake"
 ```bash
-$ cd figure_4_mountain_car
-$ gymz-controller gym FrozenLake-v0.json&
+$ cd figure_4_frozen_lake
+$ gymz-controller gym FrozenLake-v0.json &
 $ mpirun -np 6 music nest_fl.music
 ```
 
