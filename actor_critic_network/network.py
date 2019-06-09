@@ -17,26 +17,6 @@ def to_ms(t):
     return t * 1000.
 
 #######################################
-# Parse options
-
-# sys.argv = parse_args_from_music_config(sys.argv[1])
-
-# opt_parser = OptionParser()
-# opt_parser.add_option('-t', '--simtime', dest='simtime',
-#                       type='float', help='Simulation time in s')
-# opt_parser.add_option('-n', '--num_neurons_in', dest='num_neurons_in',
-#                       type='int', help='Number of encoding neurons')
-# opt_parser.add_option('-m', '--num_neurons_out', dest='num_neurons_out',
-#                       type='int', help='Number of decoding neurons')
-# opt_parser.add_option('-p', '--params', dest='params_fn',
-#                       type='str', help='Network parameters')
-
-# (options, args) = opt_parser.parse_args()
-
-# num_input_neurons = options.num_neurons_in
-# num_actor_neurons = options.num_neurons_out
-
-#######################################
 # Load parameters
 
 params_fn = 'network_params.json'
@@ -50,11 +30,10 @@ except TypeError:
 #######################################
 # Initialize Kernel
 
-# np.random.seed(int(time.time()))
 np.random.seed(123)
 
 nest.ResetKernel()
-# nest.set_verbosity('M_INFO')
+nest.set_verbosity('M_ERROR')
 nest.SetKernelStatus({'resolution': params['kernel_params']['dt'], 'print_time': False,
                       'use_wfr': False, 'overwrite_files': True, 'grng_seed': params['kernel_params']['seed'],
                       'rng_seeds': [params['kernel_params']['seed'] + 1]})
@@ -80,7 +59,7 @@ nest.SetStatus(proxy_actor, {'port_name': 'out'})
 # Create neurons
 
 # extract num neurons, otherwise NEST complains about a dict entry that it does
-# not understand
+# not understand during nest.Create
 num_input_neurons = params['input_params']['num_neurons']
 del params['input_params']['num_neurons']
 
@@ -154,10 +133,7 @@ for i, v in enumerate(range(num_actor_neurons)):
     nest.Connect([actor_neurons[i]], proxy_actor, 'one_to_one', {
                  'model': 'rate_connection_instantaneous', 'receptor_type': i})
 
-# set weights in WTA, simulate one time-step to enforce sorting of connections
-comm.Barrier()
-nest.Simulate(1.)
-
+# set weights in WTA
 for i, n0 in enumerate(actor_neurons):
     for j, n1 in enumerate(actor_neurons):
         dist = abs(i - j) 
@@ -175,7 +151,7 @@ for i, n0 in enumerate(actor_neurons):
 
 print('simulate')
 
-# comm.Barrier()
+comm.Barrier()
 start = datetime.now()
 
 nest.Simulate(to_ms(params['kernel_params']['simtime']))
