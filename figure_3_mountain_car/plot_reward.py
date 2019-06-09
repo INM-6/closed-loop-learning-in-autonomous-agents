@@ -11,9 +11,9 @@ import helper
 import plot_config
 
 params = {
-    'report_files': 'mc/mountain-car-paper-demo-*/openaigym.episode_batch.0.*.stats.json',
+    'report_files': 'mc/mountain-car-paper-demo-3/openaigym.episode_batch.0.*.stats.json',
     'env_image': 'mountain_car.png',
-    'episodes': 15,
+    'episodes': 4,
     'xlim': [0, 15],
     'ylim': [-6500, 100],
     'xlabel': 'Episode',
@@ -21,7 +21,7 @@ params = {
     'color': plot_config.custom_colors['intense sandy brown'],
     'color_dqn': plot_config.custom_colors['japanese indigo'],
     'window_size': 3,
-    'figname': 'reward_mountain_car.svg',
+    'figname': 'reward_mountain_car.{ext}',
 }
 
 
@@ -35,6 +35,8 @@ def parse_reward_file(fn):
 
 def load_rewards(report_files):
     fns = glob.glob(report_files)
+    if not fns: raise FileNotFoundError('no report files found')
+
     rewards = []
     for i, fn in enumerate(fns):
         rewards.append(parse_reward_file(fn)[:params['episodes']])
@@ -77,7 +79,8 @@ def plot_reward(params):
     # ax_rew.legend(loc=(0.1, 0.1), fontsize=plot_config.fontsize_tiny)
 
     print('[created]', params['figname'])
-    fig.savefig(params['figname'])
+    fig.savefig(params['figname'].format(ext='pdf'))
+    fig.savefig(params['figname'].format(ext='svg'))
 
 
 plot_reward(params)

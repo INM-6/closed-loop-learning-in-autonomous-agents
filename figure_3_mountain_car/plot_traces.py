@@ -20,6 +20,7 @@ params = {
     'min_time_final': 362500.,
     'max_time_final': 370000.,
     'figname': 'traces_mountain_car.svg',
+    'figname': 'traces_mountain_car.{ext}',
 }
 
 
@@ -47,7 +48,7 @@ def plot_traces(params):
 
     fig = plt.figure(figsize=plot_config.double_figure_size)
 
-    ax_initial = fig.add_axes([0.21, 0.2, 0.35, 0.77])
+    ax_initial = fig.add_axes([0.23, 0.22, 0.35, 0.77])
     ax_initial.set_xlabel(params['xlabel'], x=1.1, fontsize=plot_config.fontsize_regular)
     # ax_initial.set_ylabel(params['ylabel'])
     ax_initial.set_xlim([params['min_time_initial'], params['max_time_initial'] + 150.])
@@ -62,7 +63,7 @@ def plot_traces(params):
     plot_config.set_tick_fontsize(ax_initial, plot_config.fontsize_small)
     ax_initial.yaxis.set_tick_params(width=0)
 
-    ax_final = fig.add_axes([0.61, 0.2, 0.33, 0.77])
+    ax_final = fig.add_axes([0.63, 0.22, 0.33, 0.77])
     ax_final.set_xlim([params['min_time_final'] - 200., params['max_time_final']])
     ax_final.set_xticks([362500, 367000, 370000])
     ax_final.set_xticklabels([362.5, 367.0, 370.0])
@@ -77,8 +78,8 @@ def plot_traces(params):
     ax_training = fig.add_axes([0.0, 0.0, 1.0, 1.0], frameon=False, xticks=[], yticks=[])
     ax_training.set_xlim([0, 1])
     ax_training.set_ylim([0, 1])
-    ax_training.add_patch(plt.Rectangle((0.56, 0.18), 0.05, 0.98, linewidth=0, color=plot_config.custom_colors['light gray'], alpha=0.5))
-    ax_training.text(0.575, 0.63, '{}s'.format((params['min_time_final'] - params['max_time_initial']) / 1000.), rotation=90, fontsize=0.9 * plot_config.fontsize_small)
+    ax_training.add_patch(plt.Rectangle((0.58, 0.18), 0.05, 0.98, linewidth=0, color=plot_config.custom_colors['light gray'], alpha=0.5))
+    ax_training.text(0.595, 0.63, '{}s'.format((params['min_time_final'] - params['max_time_initial']) / 1000.), rotation=90, fontsize=0.9 * plot_config.fontsize_small)
 
     # plot the diagonals indicating cut axis
     d = .005  # how big to make the diagonal lines in axes coordinates
@@ -107,6 +108,7 @@ def plot_traces(params):
     ax_final.plot(times_reward[pos_final_in], 10. * rates_reward[0][pos_final_in] + 5.5)
 
     print('[created]', params['figname'])
-    fig.savefig(params['figname'])
+    fig.savefig(params['figname'].format(ext='svg'))
+    fig.savefig(params['figname'].format(ext='pdf'))
 
 plot_traces(params)
