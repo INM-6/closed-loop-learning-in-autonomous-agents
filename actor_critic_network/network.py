@@ -105,15 +105,15 @@ multimeter_critic = nest.Create('multimeter', 1, {
 multimeter_reward = nest.Create('multimeter', 1, {
     'label': params['all']['label_prefix'] + 'reward', 'to_file': True})
 
-# wr = nest.Create('weight_recorder', 1, {
-#     'label': params['all']['label_prefix'] + 'weight_recorder',
-#     'to_file': True, 'to_screen': False, 'interval': 100})
+wr = nest.Create('weight_recorder', 1, {
+    'label': params['all']['label_prefix'] + 'weight_recorder',
+    'to_file': True, 'to_screen': False, 'interval': 100})
 
 #######################################
 # Create connections
 
 nest.SetDefaults('hebbian_rate_connection', {'vt': reward_neurons[
-                 0], 'n_threshold': 0.})
+    0], 'n_threshold': 0., 'weight_recorder': wr[0]})
 
 # input -> critic
 nest.Connect(input_neurons, critic_neurons, 'all_to_all', params['input_critic_params'])
