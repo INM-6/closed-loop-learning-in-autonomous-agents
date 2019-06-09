@@ -30,7 +30,6 @@ rtf=1.0
   binary=argmax_adapter
   args=
   np=1
-  verbose=true
   music_timestep=0.001
 [command]
   binary=cont_zmq_adapter

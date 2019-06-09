@@ -13,7 +13,7 @@
         "initial_reward": -1.0,
         "final_reward": -0.4,
         "render": true,
-        "monitor": true,
+        "monitor": false,
         "monitor_dir": "./mountain-car-paper-demo-3/",
         "monitor_args":
         {

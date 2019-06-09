@@ -6,15 +6,17 @@
 
     "kernel_params":
     {
+        "simtime": 400.0,
         "dt": 1.0,
         "delay": 1.0,
         "sigma": 0.0,
-        "neuron_model": "thresholdlin_rate_ipn",
+        "neuron_model": "threshold_lin_rate_ipn",
         "seed": 9
     },
 
     "input_params":
     {
+        "num_neurons": 25,
         "tau": 1.0,
         "g": 1.0,
         "mean": 0.0,
@@ -41,6 +43,7 @@
 
     "actor_params":
     {
+        "num_neurons": 3,
         "g": 1.0,
         "tau": 0.1,
         "mean": 0.0,

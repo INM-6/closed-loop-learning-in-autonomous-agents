@@ -12,15 +12,6 @@ from mpi4py import MPI  # needs to be imported after NEST
 
 comm = MPI.COMM_WORLD
 
-def parse_args_from_music_config(fn):
-
-    with open(fn, 'r') as f:
-        in_nest_section = False
-        for l in f:
-            if 'nest' in l:
-                in_nest_section = True
-            if in_nest_section and 'args' in l:
-                return l.split('=')[1].replace('\n', '').split(' ')
 
 def to_ms(t):
     return t * 1000.
@@ -30,26 +21,28 @@ def to_ms(t):
 
 # sys.argv = parse_args_from_music_config(sys.argv[1])
 
-opt_parser = OptionParser()
-opt_parser.add_option('-t', '--simtime', dest='simtime',
-                      type='float', help='Simulation time in s')
-opt_parser.add_option('-n', '--num_neurons_in', dest='num_neurons_in',
-                      type='int', help='Number of encoding neurons')
-opt_parser.add_option('-m', '--num_neurons_out', dest='num_neurons_out',
-                      type='int', help='Number of decoding neurons')
-opt_parser.add_option('-p', '--params', dest='params_fn',
-                      type='str', help='Network parameters')
+# opt_parser = OptionParser()
+# opt_parser.add_option('-t', '--simtime', dest='simtime',
+#                       type='float', help='Simulation time in s')
+# opt_parser.add_option('-n', '--num_neurons_in', dest='num_neurons_in',
+#                       type='int', help='Number of encoding neurons')
+# opt_parser.add_option('-m', '--num_neurons_out', dest='num_neurons_out',
+#                       type='int', help='Number of decoding neurons')
+# opt_parser.add_option('-p', '--params', dest='params_fn',
+#                       type='str', help='Network parameters')
 
-(options, args) = opt_parser.parse_args()
+# (options, args) = opt_parser.parse_args()
 
-num_input_neurons = options.num_neurons_in
-num_actor_neurons = options.num_neurons_out
+# num_input_neurons = options.num_neurons_in
+# num_actor_neurons = options.num_neurons_out
 
 #######################################
 # Load parameters
 
+params_fn = 'network_params.json'
+
 try:
-    with open(options.params_fn, 'r') as f:
+    with open(params_fn, 'r') as f:
         params = json.load(f)
 except TypeError:
     raise ValueError('Please provide a network parameter file.')
@@ -61,8 +54,8 @@ except TypeError:
 np.random.seed(123)
 
 nest.ResetKernel()
-nest.set_verbosity('M_FATAL')
-nest.SetKernelStatus({'resolution': params['kernel_params']['dt'], 'print_time': True,
+# nest.set_verbosity('M_INFO')
+nest.SetKernelStatus({'resolution': params['kernel_params']['dt'], 'print_time': False,
                       'use_wfr': False, 'overwrite_files': True, 'grng_seed': params['kernel_params']['seed'],
                       'rng_seeds': [params['kernel_params']['seed'] + 1]})
 
@@ -74,10 +67,9 @@ nest.SetStatus(reward_in, [{'port_name': 'reward_in',
                             'music_channel': c} for c in range(1)])
 nest.SetAcceptableLatency('reward_in', params['kernel_params']['delay'])  # useless?
 
-
-proxy_in = nest.Create('music_rate_in_proxy', num_input_neurons)
+proxy_in = nest.Create('music_rate_in_proxy', params['input_params']['num_neurons'])
 nest.SetStatus(proxy_in, [{'port_name': 'in', 'music_channel': c}
-                          for c in range(num_input_neurons)])
+                          for c in range(params['input_params']['num_neurons'])])
 nest.SetAcceptableLatency('in', params['kernel_params']['delay'])  # useless?
 
 
@@ -86,6 +78,14 @@ nest.SetStatus(proxy_actor, {'port_name': 'out'})
 
 #######################################
 # Create neurons
+
+# extract num neurons, otherwise NEST complains about a dict entry that it does
+# not understand
+num_input_neurons = params['input_params']['num_neurons']
+del params['input_params']['num_neurons']
+
+num_actor_neurons = params['actor_params']['num_neurons']
+del params['actor_params']['num_neurons']
 
 input_neurons = nest.Create(params['kernel_params']['neuron_model'], num_input_neurons, params['input_params'])
 actor_neurons = nest.Create(params['kernel_params']['neuron_model'], num_actor_neurons, params['actor_params'])
@@ -105,27 +105,27 @@ multimeter_critic = nest.Create('multimeter', 1, {
 multimeter_reward = nest.Create('multimeter', 1, {
     'label': params['all']['label_prefix'] + 'reward', 'to_file': True})
 
-wr = nest.Create('weight_recorder', 1, {
-    'label': params['all']['label_prefix'] + 'weight_recorder',
-    'to_file': True, 'to_screen': False, 'interval': 100})
+# wr = nest.Create('weight_recorder', 1, {
+#     'label': params['all']['label_prefix'] + 'weight_recorder',
+#     'to_file': True, 'to_screen': False, 'interval': 100})
 
 #######################################
 # Create connections
 
 nest.SetDefaults('hebbian_rate_connection', {'vt': reward_neurons[
-                 0], 'n_threshold': 0., 'weight_recorder': wr[0]})
+                 0], 'n_threshold': 0.})
 
 # input -> critic
 nest.Connect(input_neurons, critic_neurons, 'all_to_all', params['input_critic_params'])
 
 # critic -> reward
 nest.Connect(critic_neurons, reward_neurons, 'all_to_all', {
-    'model': 'rate_connection',
+    'model': 'rate_connection_instantaneous',
     'weight': params['critic_reward_params']['weight_scaling'] * (
         1. / params['critic_reward_params']['delay'] - 1. / params['critic_reward_params']['tau_r']),
 })
 nest.Connect(critic_neurons, reward_neurons, 'all_to_all', {
-    'model': 'delay_rate_connection',
+    'model': 'rate_connection_delayed',
     'weight': -1. * params['critic_reward_params']['weight_scaling'] / params['critic_reward_params']['delay'],
     'delay': params['critic_reward_params']['delay']
 })
@@ -134,19 +134,7 @@ nest.Connect(critic_neurons, reward_neurons, 'all_to_all', {
 nest.Connect(input_neurons, actor_neurons, 'all_to_all', params['input_actor_params'])
 
 # actor wta circuit
-nest.Connect(actor_neurons, actor_neurons, 'all_to_all', {'model': 'rate_connection', 'weight': 1.})
-
-for i, n0 in enumerate(actor_neurons):
-    for j, n1 in enumerate(actor_neurons):
-        dist = abs(i - j) 
-        if dist > num_actor_neurons/2:
-            dist = abs(dist - num_actor_neurons)
-
-        weight = params['actor_wta_params']['exc'] * np.exp(- np.dot(dist, dist) / np.power(params['actor_wta_params']['sigma'], 2) ) + params['actor_wta_params']['inh']
-
-        c = nest.GetConnections([n0], [n1])
-        nest.SetStatus(c, {'weight': weight})
-
+nest.Connect(actor_neurons, actor_neurons, 'all_to_all', {'model': 'rate_connection_instantaneous', 'weight': 1.})
 
 # devices -> neurons
 nest.Connect(multimeter_inp, input_neurons, syn_spec={'delay': params['kernel_params']['delay']})
@@ -156,25 +144,41 @@ nest.Connect(multimeter_reward, reward_neurons, syn_spec={'delay': params['kerne
 
 # MUSIC proxies -> neurons
 nest.Connect(proxy_in, input_neurons, 'one_to_one',
-             syn_spec={'model': 'rate_connection', 'weight': 0.5})
+             syn_spec={'model': 'rate_connection_instantaneous', 'weight': 0.5})
 
 
 nest.Connect(reward_in, reward_neurons, 'one_to_one',
-             syn_spec={'model': 'rate_connection', 'weight': params['reward_input_params']['weight']})
+             syn_spec={'model': 'rate_connection_instantaneous', 'weight': params['reward_input_params']['weight']})
 
 for i, v in enumerate(range(num_actor_neurons)):
     nest.Connect([actor_neurons[i]], proxy_actor, 'one_to_one', {
-                 'model': 'rate_connection', 'receptor_type': i})
+                 'model': 'rate_connection_instantaneous', 'receptor_type': i})
+
+# set weights in WTA, simulate one time-step to enforce sorting of connections
+comm.Barrier()
+nest.Simulate(1.)
+
+for i, n0 in enumerate(actor_neurons):
+    for j, n1 in enumerate(actor_neurons):
+        dist = abs(i - j) 
+        if dist > num_actor_neurons / 2:
+            dist = abs(dist - num_actor_neurons)
+
+        weight = params['actor_wta_params']['exc'] * np.exp(- np.dot(dist, dist) / np.power(params['actor_wta_params']['sigma'], 2) ) + params['actor_wta_params']['inh']
+
+        c = nest.GetConnections([n0], [n1])
+        nest.SetStatus(c, {'weight': weight})
+
 
 #######################################
 # Simulate network
 
 print('simulate')
 
-comm.Barrier()
+# comm.Barrier()
 start = datetime.now()
 
-nest.Simulate(to_ms(options.simtime))
+nest.Simulate(to_ms(params['kernel_params']['simtime']))
 
 end = datetime.now()
 dt = end - start
