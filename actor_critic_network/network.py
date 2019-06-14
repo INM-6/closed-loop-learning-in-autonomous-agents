@@ -62,7 +62,6 @@ nest.SetStatus(proxy_actor, {'port_name': 'out'})
 # not understand during nest.Create
 num_input_neurons = params['input_params']['num_neurons']
 del params['input_params']['num_neurons']
-
 num_actor_neurons = params['actor_params']['num_neurons']
 del params['actor_params']['num_neurons']
 
@@ -125,7 +124,6 @@ nest.Connect(multimeter_reward, reward_neurons, syn_spec={'delay': params['kerne
 nest.Connect(proxy_in, input_neurons, 'one_to_one',
              syn_spec={'model': 'rate_connection_instantaneous', 'weight': 0.5})
 
-
 nest.Connect(reward_in, reward_neurons, 'one_to_one',
              syn_spec={'model': 'rate_connection_instantaneous', 'weight': params['reward_input_params']['weight']})
 
@@ -136,7 +134,7 @@ for i, v in enumerate(range(num_actor_neurons)):
 # set weights in WTA
 for i, n0 in enumerate(actor_neurons):
     for j, n1 in enumerate(actor_neurons):
-        dist = abs(i - j) 
+        dist = abs(i - j)
         if dist > num_actor_neurons / 2:
             dist = abs(dist - num_actor_neurons)
 
