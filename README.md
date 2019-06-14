@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This repository contains simulation and analysis scripts to reproduce two figures from the publication "A closed-loop toolchain for neural networksimulations of learning autonomous agents".
+This repository contains simulation and analysis scripts to reproduce two figures from the publication "A closed-loop toolchain for neural network simulations of learning autonomous agents".
 
 The network model is implemented in PyNEST and can be found in `actor_critic_network/network.py`.
 
