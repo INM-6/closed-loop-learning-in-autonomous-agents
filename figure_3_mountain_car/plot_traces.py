@@ -9,10 +9,10 @@ import helper
 import plot_config
 
 params = {
-    'in_file': 'new-paper-demo-in-58-0.dat',
-    'actor_file': 'new-paper-demo-actor-59-0.dat',
-    'critic_file': 'new-paper-demo-critic-60-0.dat',
-    'reward_file': 'new-paper-demo-reward-61-0.dat',
+    'in_file': 'in-58-0.dat',
+    'actor_file': 'actor-59-0.dat',
+    'critic_file': 'critic-60-0.dat',
+    'reward_file': 'reward-61-0.dat',
     'xlabel': 'Time (s)',
     'ylabel': 'Activity',
     'min_time_initial': 12500.,
@@ -49,10 +49,7 @@ def plot_traces(params):
 
     ax_initial = fig.add_axes([0.23, 0.22, 0.33, 0.76])
     ax_initial.set_xlabel(params['xlabel'], x=1.1, fontsize=plot_config.fontsize_regular)
-    # ax_initial.set_ylabel(params['ylabel'])
     ax_initial.set_xlim([params['min_time_initial'], params['max_time_initial'] + 150.])
-    # ax_initial.set_xticks([10000, 12500, 15000])
-    # ax_initial.set_xticklabels([10.0, 12.5, 15.0])
     ax_initial.set_xticks([12500, 15000, 17500])
     ax_initial.set_xticklabels([12.5, 15.0, 17.5])
     ax_initial.set_ylim([0., 6.])

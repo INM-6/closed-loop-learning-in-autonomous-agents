@@ -57,7 +57,6 @@ def plot_weights(params):
     for i in input_neurons:
         for k, j in enumerate(critic_neurons):
             plt.plot(times / 1000., weights[:, i - np.min(input_neurons), j - np.min(critic_neurons)], label='pre: {}({}), post: {}'.format(i, i - np.min(input_neurons), j), color=list(plot_config.custom_colors.values())[(i+i*k)%7])
-    #plt.legend(loc='upper left', prop={'size': 10})
     fig.savefig( params["figname_critic"])
 
 
@@ -73,7 +72,6 @@ def parse_reward(fn):
     return episodes, rewards
 
 def plot_reward(params):
-    # plt.rcParams.update({'font.size': plot_config.fontsize_mhuge})
     fig = plt.figure(figsize=plot_config.double_figure_size)
     ax = fig.add_axes([0.23, 0.2, 0.74, 0.77])
     ax.set_xlabel(params['xlabel'], fontsize=plot_config.fontsize_regular)
@@ -101,18 +99,15 @@ def plot_reward(params):
     for i, reward_slide in enumerate(slides):
         slides[i] = np.array(reward_slide[1:min_length])
         col = params['color_reward']
-        #ax.plot(slides[i], color=col, lw=1.5, alpha=1.0, label=params["labels"][0])
 
 
     slides = np.array(slides)
 
-    
     mean_slide = np.mean(slides, axis=0)
     std_slide = np.std(slides, axis=0)
     col = params['color_reward']
     ax.plot(mean_slide, '-', color=col, lw=1.5, alpha=1.0, label=params["labels"][0])
     ax.fill_between(np.arange(len(mean_slide)), mean_slide - std_slide, mean_slide + std_slide, color=col, alpha=0.5, linewidth=0)
-    
 
     ax.axhline(1. / 6., color=plot_config.custom_colors['light gray'], label='theoretical optimum', alpha=0.7, lw=1.5, zorder=-1)
     ax.set_ylim([-0.15, 0.2])
