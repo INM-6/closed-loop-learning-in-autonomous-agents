@@ -116,6 +116,7 @@ def plot_reward(params):
 
     ax.axhline(1. / 6., color=plot_config.custom_colors['light gray'], label='theoretical optimum', alpha=0.7, lw=1.5, zorder=-1)
     ax.set_ylim([-0.15, 0.2])
+    ax.set_xlim([0, 3500])
 
     ax_env.imshow(sc.imread(params['env_image']), interpolation='none')
 
