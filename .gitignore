@@ -1,8 +1,3 @@
 *.swp
 *.swo
-*.dat
-*.svg
-*.csv
-figure_3_mountain_car/mc
-figure_4_frozen_lake/fl
 *.pyc
