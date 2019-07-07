@@ -10,5 +10,3 @@ for i, x in enumerate(np.linspace(-1.0, 1.0, 5)):
 
 with open("grid_pos.json", "w+") as f:
     json.dump(pos, f)
-
-

@@ -11,7 +11,7 @@ import helper
 import plot_config
 
 params = {
-    'report_files': 'mc/mountain-car-paper-demo-3/openaigym.episode_batch.0.*.stats.json',
+    'report_files': 'mc/openaigym.episode_batch.0.*.stats.json',
     'env_image': 'mountain_car.png',
     'episodes': 15,
     'xlim': [0, 15],
@@ -63,20 +63,11 @@ def plot_reward(params):
 
     ax_env.imshow(sc.imread(params['env_image']), interpolation='none')
 
-    # ax_rew.plot(rewards[-1], label=i)
-
     mean_rewards, std_rewards = load_rewards(params['report_files'])
-    #mean_rewards_dqn, std_rewards_dqn = load_rewards(params['report_files_dqn'])
 
     ax_rew.axhline(-110, color=plot_config.custom_colors['light gray'], alpha=0.7, label='solved', lw=1.5, zorder=-1)
-
-    #ax_rew.fill_between(np.arange(params['episodes']), mean_rewards_dqn - std_rewards_dqn, mean_rewards_dqn + std_rewards_dqn, color=params['color_dqn'], alpha=0.5, linewidth=0)
-    #ax_rew.plot(np.arange(params['episodes']), mean_rewards_dqn, lw=1.5, color=params['color_dqn'], label='Q-learning')
-
     ax_rew.fill_between(np.arange(params['episodes']), mean_rewards - std_rewards, mean_rewards + std_rewards, color=params['color'], alpha=0.5, linewidth=0)
     ax_rew.plot(np.arange(params['episodes']), mean_rewards, lw=1.5, color=params['color'], label='Our model')
-
-    # ax_rew.legend(loc=(0.1, 0.1), fontsize=plot_config.fontsize_tiny)
 
     print('[created]', params['figname'])
     fig.savefig(params['figname'].format(ext='pdf'))
