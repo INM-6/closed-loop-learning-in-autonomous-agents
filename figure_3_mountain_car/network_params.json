@@ -60,13 +60,13 @@
 
     "input_critic_params":
     {
-        "model": "hebbian_rate_connection"
+        "model": "hebbian_rate_connection",
         "A": 0.1250,
         "weight_decay_constant": 0.0,
         "Wmax": 1.0,
         "Wmin": -1.0,
         "post_threshold": -1.0,
-        "trace_delay_steps": 1,
+        "trace_delay_steps": 1
     },
 
     "critic_reward_params":
@@ -78,14 +78,14 @@
 
     "input_actor_params":
     {
-        "model": "hebbian_rate_connection"
+        "model": "hebbian_rate_connection",
         "weight": 0.3,
         "A": 0.250,
         "weight_decay_constant": 0.0,
         "Wmax": 1.0,
         "Wmin": 0.05,
         "post_threshold": 0.1,
-        "trace_delay_steps": 1,
+        "trace_delay_steps": 1
     },
 
     "actor_wta_params":

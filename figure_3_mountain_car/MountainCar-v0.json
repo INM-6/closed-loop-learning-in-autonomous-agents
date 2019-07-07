@@ -15,7 +15,7 @@
         "final_reward": -0.4,
         "render": true,
         "monitor": true,
-        "monitor_dir": "./mountain-car-experiment/",
+        "monitor_dir": "./",
         "monitor_args":
         {
             "write_upon_reset": true,
